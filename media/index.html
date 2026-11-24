@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src {{source}}; style-src {{source}}; script-src {{source}}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Волжская рыбалка</title><link rel="stylesheet" href="{{media}}/style.css">
+</head><body>
+<main id="scene" class="scene morning" aria-label="Саратовский плёс">
+<canvas id="weather" aria-hidden="true"></canvas>
+<img class="foliage willow" src="{{media}}/assets/willow.png" alt=""><img class="foliage reeds" src="{{media}}/assets/reeds.png" alt="">
+<canvas id="water" tabindex="0" aria-label="Место заброса. Пробел — заброс или катушка. Стрелка вверх — подсечка или удилище."></canvas>
+<nav><button class="kit-button" id="netButton" title="Садок" aria-label="Открыть садок" aria-haspopup="dialog"><span class="icon icon-basket" aria-hidden="true"></span></button>
+<button class="kit-button" id="help" title="Насадка и управление" aria-label="Выбрать насадку, время суток или посмотреть управление" aria-haspopup="dialog"><span class="icon icon-fish-hook" aria-hidden="true"></span></button></nav>
+<span id="title" class="reader" role="status"></span><span id="feedback" hidden></span>
+<div id="landedTag" class="field-paper" hidden aria-hidden="true"><span id="landedName"></span><strong id="landedWeight"></strong></div>
+<div id="loads" hidden><label title="Усилие катушки · ЛКМ"><progress id="reel" aria-label="Усилие катушки" max="100" value="0"></progress><span class="icon icon-rotate-clockwise" aria-hidden="true"></span></label><label title="Усилие удилища · ПКМ"><progress id="rod" aria-label="Усилие удилища" max="100" value="0"></progress><span class="icon icon-arrow-up-right" aria-hidden="true"></span></label></div>
+<dialog id="net" aria-labelledby="netTitle"><header><h2 id="netTitle">Садок <small id="count">0</small></h2><button class="close" aria-label="Закрыть садок"><span class="icon icon-close" aria-hidden="true"></span></button></header>
+<p id="empty">Садок пуст.</p>
+<div id="catchList"></div>
+<details id="archive" hidden><summary>Прежний журнал</summary><p id="records"></p></details></dialog>
+<dialog id="catchInfo" aria-labelledby="catchName"><header><h2 id="catchName"></h2><button class="close" aria-label="Вернуться в садок"><span class="icon icon-close" aria-hidden="true"></span></button></header>
+<article class="field-paper specimen-note">
+  <div class="specimen"><div class="specimen-plate"><img id="catchPortrait" alt=""></div><strong id="catchWeight"></strong></div>
+  <p id="catchDescription"></p>
+  <footer><p id="catchBait"></p><p id="catchThreshold"></p><p id="catchTime" hidden></p></footer>
+</article></dialog>
+<dialog id="guide" aria-labelledby="guideTitle"><header><h2 id="guideTitle">Снасть</h2><button class="close" aria-label="Закрыть управление"><span class="icon icon-close" aria-hidden="true"></span></button></header>
+<fieldset id="bait"><legend>Насадка</legend><div id="baitCards"></div></fieldset>
+<label class="time">Время суток <span class="select-wrap"><select id="period"><option value="auto">По часам компьютера</option><option value="morning">Утро</option><option value="day">День</option><option value="evening">Вечер</option><option value="night">Ночь</option></select></span></label>
+<details><summary>Как ловить</summary><p>Перед забросом наведите мышь на воду: дуга показывает дальность удочки. ЛКМ по воде внутри дуги — заброс. При первых касаниях поплавок дрожит и выпрямляется. Подсекайте ПКМ, когда он уверенно тонет, идёт в сторону или ложится на воду.</p>
+<p>Держите ЛКМ, чтобы выбирать леску, и ПКМ, чтобы поднимать удилище. При предупреждении отпустите кнопку. На 100% снасть ломается.</p>
+<p>Стаи приходят на кормёжку и уходят. Круги на воде подсказывают, куда забросить. Золотой кубок в садке отмечает зачётный вес для этого вида.</p><p>С клавиатуры используйте пробел и ↑. Садок и меню снасти ставят рыбалку на паузу. Пока вы пишете код, стаи движутся и поклёвка может закончиться.</p></details></dialog>
+</main>
+<script src="{{media}}/catalog.js"></script><script src="{{media}}/shoals.js"></script><script src="{{media}}/sun.js"></script><script src="{{media}}/fishing.js"></script><script src="{{media}}/landing.js"></script><script src="{{media}}/wind.js"></script><script src="{{media}}/weather.js"></script><script src="{{media}}/scene.js"></script><script src="{{media}}/game.js"></script>
+</body></html>

@@ -1,0 +1,121 @@
+:root { --scene-height:min(100vh,clamp(100px,62vw,320px)); --gap:4px; --pad:8px; --ivory:#fff1cd; --ink:#382e20; --brass:#c7a466; --paper:url(assets/field-paper.jpg); --canvas:url(assets/field-canvas.jpg); color-scheme:light }
+* { box-sizing:border-box }
+body { margin:0; padding:0; background:transparent; font:14px/1.35 "Segoe UI",sans-serif }
+[hidden] { display:none !important }
+.scene { width:100%; height:var(--scene-height); position:relative; isolation:isolate; overflow:hidden; border:1px solid #87724b; border-radius:5px; background-size:cover; background-position:center bottom; --light:brightness(.87) }
+.morning {background-image:url(assets/morning.jpg)} .day {background-image:url(assets/day.jpg); --light:brightness(1.07)}
+.evening {background-image:url(assets/evening.jpg); --light:brightness(.7) sepia(.2)}
+.night {background-image:url(assets/night.jpg); --light:brightness(.35) saturate(.6) hue-rotate(80deg)}
+.foliage { position:absolute; pointer-events:none; filter:var(--light) }
+.willow {width:38%; left:-12%; top:-7%; transform-origin:0 0; transform:rotate(var(--branch-angle,0deg))}
+.reeds {width:19%; left:-6%; bottom:-3%; transform-origin:22% 100%; transform:skewX(var(--reed-angle,0deg))}
+@media(prefers-reduced-motion:reduce) { .foliage {transform:none} }
+canvas { position:absolute; inset:0; width:100%; height:100%; cursor:crosshair; touch-action:none }
+nav {position:absolute; right:var(--gap); top:var(--gap); display:flex; gap:var(--gap)}
+button,select {font:inherit; cursor:pointer}
+.icon,summary::before,#baitCards label:has(:checked)::after,.select-wrap::after {
+  display:inline-block; width:16px; height:16px; flex:none; background:currentColor;
+  mask:var(--icon) center / contain no-repeat; pointer-events:none;
+}
+.icon-basket {--icon:url(icons/tabler/basket.svg)}
+.icon-fish-hook {--icon:url(icons/tabler/fish-hook.svg)}
+.icon-rotate-clockwise {--icon:url(icons/tabler/rotate-clockwise.svg)}
+.icon-arrow-up-right {--icon:url(icons/tabler/arrow-up-right.svg)}
+.icon-close {--icon:url(icons/tabler/x.svg)}
+button:hover {filter:brightness(1.12)}
+:focus-visible {outline:2px solid #ffba55; outline-offset:-2px}
+.reader {position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap}
+#feedback {position:absolute; bottom:3px; left:4px; color:#fff2cd; background:#342e24ce; border-radius:3px; padding:1px 4px; font-size:11px; line-height:1.15; pointer-events:none; animation:fade 3s forwards}
+@keyframes fade {70% {opacity:1} 100% {opacity:0}}
+#loads {position:absolute; bottom:6px; left:7px; display:flex; gap:4px; pointer-events:none; --length:clamp(28px,21vmin,52px)}
+#loads label {position:relative; width:10px; height:calc(var(--length) + 13px); border:1px solid #b99868; border-radius:5px; background:linear-gradient(90deg,#273121,#4b5238 45%,#283021); box-shadow:0 1px 2px #17221d88}
+#loads .icon {position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:10px; height:10px; color:#ffe6b4}
+progress {position:absolute; top:calc(var(--length)/2 + 1px); left:50%; transform:translate(-50%,-50%) rotate(-90deg); width:var(--length); height:4px; border:0; border-radius:2px; overflow:hidden; background:#28342e}
+progress::-webkit-progress-bar {background:#28342e}
+progress::-webkit-progress-value {background:linear-gradient(to bottom,#88bccc,#427e9d)}
+progress.hot::-webkit-progress-value {background:#ff8955}
+#rod::-webkit-progress-value {background:#abc677}
+#loads progress.hot::-webkit-progress-value {background:#ff8955}
+.scene::after {content:""; position:absolute; inset:2px; border:1px dashed #d0b57988; border-radius:3px; pointer-events:none}
+.scene nav {z-index:1; right:6px; top:6px}
+.kit-button,.close {
+  display:grid; place-items:center; flex:none; width:24px; height:24px; padding:0;
+  color:#fff0cc; border:1px solid var(--brass); border-radius:4px;
+  background:linear-gradient(#4e5138,#293227); box-shadow:inset 0 0 0 1px #685d40,0 1px 2px #10181090;
+}
+dialog {
+  position:fixed; inset:0 auto auto 0; width:100%; height:min(100vh,max(235px,var(--scene-height)));
+  max-width:none; max-height:none; margin:0; padding:5px 7px 7px; overflow-y:auto;
+  color:#fff1d3; background:#333c28 var(--canvas) repeat center / 155px;
+  border:1px solid #8e7852; border-radius:5px; outline:1px dashed #bcaa7c; outline-offset:-4px;
+  scrollbar-width:thin; scrollbar-color:#ac9d7b #344132;
+}
+dialog::backdrop {background:transparent}
+dialog h2,dialog p {margin:0}
+dialog header,.time {display:flex; align-items:center; justify-content:space-between; gap:5px}
+dialog header {padding-bottom:4px; margin-bottom:4px; border-bottom:1px dashed #c9bb98}
+dialog h2 {font-size:18px; line-height:1.12; font-weight:650}
+#count {font-size:12px; font-weight:500; margin-left:3px}
+.field-paper,.time select {
+  color:var(--ink); background:#eddec1 var(--paper) repeat center / 98px;
+  border:1px solid #c4ad84; border-radius:3px;
+}
+#catchList,#baitCards {display:grid; gap:1px}
+#catchList {grid-template-columns:repeat(auto-fill,minmax(min(125px,100%),1fr))}
+.catch-card {
+  position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(min(78px,100%),54%);
+  min-width:0; align-items:center; min-height:41px; padding:1px; text-align:left;
+}
+.catch-card img {width:100%; height:36px; object-fit:contain; filter:drop-shadow(0 1px 1px #534a3370)}
+.catch-label {display:grid; gap:1px; min-width:0; padding:1px 2px; line-height:1.09}
+.catch-label strong {font-size:12px; font-weight:500; overflow-wrap:anywhere}
+.catch-label span {font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap}
+.catch-card.trophy {border-color:#9a732d; box-shadow:inset 2px 0 #a78139}
+.catch-card.trophy::after {content:""; position:absolute; left:2px; top:2px; width:11px; height:11px;
+  background:#775215; mask:url(icons/tabler/trophy.svg) center / contain no-repeat}
+.catch-card:focus-visible,.bait-card:has(:focus-visible) {outline:2px solid #8e5615; outline-offset:-2px}
+#empty,#archive {margin:7px 0 2px}
+#records {white-space:pre-line}
+.specimen-note {padding:6px 8px}
+.specimen {display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:8px; padding:0 3px 5px; border-bottom:1px solid #b59f79}
+.specimen-plate {position:relative; min-width:0; padding-bottom:4px}
+.specimen-plate::after {content:""; position:absolute; left:9%; right:9%; bottom:0; height:4px; opacity:.6;
+  border-bottom:1px solid #92794f; background:repeating-linear-gradient(90deg,#92794f 0 1px,transparent 1px 13px)}
+#catchPortrait {display:block; width:100%; height:clamp(48px,25vh,82px); object-fit:contain}
+#catchWeight {font-size:clamp(17px,5.3vw,23px); line-height:1.2; padding:5px 0 5px 8px; border-left:1px solid #b59f79; white-space:nowrap}
+dialog p,dialog details,.time {font-size:13px; line-height:1.32}
+#catchDescription {margin:5px 0}
+.specimen-note footer {border-top:1px solid #b59f79; padding-top:3px}
+.specimen-note footer p {font-size:12px; margin:2px 0}
+#bait {min-width:0; padding:0; margin:0; border:0}
+#bait legend {font-size:12px; padding:0; margin-bottom:2px}
+#baitCards {grid-template-columns:repeat(3,minmax(0,1fr))}
+.bait-card {display:grid; position:relative; min-width:0; padding:1px 15px 3px 5px; cursor:pointer; font-size:12px; line-height:1.12}
+.bait-card img {width:100%; height:clamp(22px,12vh,35px); object-fit:contain}
+.bait-card input {width:100%; height:100%; margin:0; opacity:0; position:absolute; inset:0; cursor:pointer}
+.bait-card::before {content:""; position:absolute; right:3px; bottom:3px; width:10px; height:10px; border:1px solid #867450; border-radius:2px}
+.bait-card:has(:checked)::before {background:#3c4a32; border-color:#a58348}
+#baitCards label:has(:checked)::after {content:""; --icon:url(icons/tabler/check.svg); position:absolute; bottom:3px; right:3px; width:12px; height:12px; color:#fff0c8}
+#bait:disabled {opacity:.65}
+.time {justify-content:flex-start; flex-wrap:wrap; margin-top:7px}
+.select-wrap {position:relative; display:inline-flex; min-width:0}
+.time select {appearance:none; max-width:100%; padding:2px 20px 2px 5px}
+.select-wrap::after {content:""; --icon:url(icons/tabler/chevron-down.svg); position:absolute; right:3px; top:50%; transform:translateY(-50%); color:var(--ink)}
+dialog details > summary {display:flex; align-items:center; gap:4px; list-style:none; cursor:pointer; min-height:23px}
+summary::-webkit-details-marker {display:none}
+dialog details > summary::before {content:""; --icon:url(icons/tabler/chevron-right.svg); width:14px; height:14px}
+dialog details[open] > summary::before {transform:rotate(90deg)}
+#guide details {border-top:1px dashed #b6a57f; margin-top:6px}
+#guide details p {margin:5px 0}
+@media(max-height:160px) {
+  dialog h2 {font-size:16px}
+  .kit-button,.close {width:21px; height:21px}
+  #catchPortrait {height:44px}
+}
+#weather {pointer-events:none}
+#landedTag {position:absolute; bottom:6px; right:6px; max-width:39%; display:grid; padding:2px 6px 3px 13px;
+  line-height:1.1; text-align:center; border-radius:7px 3px 3px 7px; box-shadow:0 1px 2px #211c1199;
+  font-size:11px; pointer-events:none}
+#landedTag::before {content:""; position:absolute; left:4px; top:calc(50% - 2px); width:4px; height:4px;
+  border:1px solid #a18141; border-radius:50%; background:#43432d}
+#landedWeight {font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap}
